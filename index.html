@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Out - Adarsh Wallet</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+  .header { padding: 16px; text-align: center; }
+  .logo { width: 32px; height: 32px; background: #22d3ee; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a; font-size: 14px; margin-right: 8px; }
+  .brand { font-size: 16px; font-weight: 700; letter-spacing: 0.5px; vertical-align: middle; }
+  .brand span { color: #fbbf24; }
+  .sub { font-size: 11px; color: #94a3b8; letter-spacing: 1px; margin-top: 4px; display: block; }
+
+  .page-title { font-size: 22px; font-weight: 700; margin: 20px 16px 6px 16px; color: #fff; }
+  .page-sub { font-size: 13px; color: #94a3b8; margin: 0 16px 18px 16px; }
+
+  .card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 18px 16px;
+    margin: 0 16px 16px 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .bal-label { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+  .bal-amount { font-size: 28px; font-weight: 800; color: #fbbf24; margin-bottom: 4px; }
+  .bal-note { font-size: 12px; color: #94a3b8; }
+
+  .method-card {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .method-card.selected { border-color: #3b82f6; background: rgba(59,130,246,0.15); }
+  .method-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .method-info { flex: 1; }
+  .method-name { font-size: 15px; font-weight: 600; color: #fff; }
+  .method-desc { font-size: 12px; color: #94a3b8; }
+
+  .input-group { margin-bottom: 16px; }
+  .field-label { font-size: 12px; color: #94a3b8; margin-bottom: 8px; display: block; }
+  .input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #fff;
+    padding: 14px 16px;
+    font-size: 16px;
+    outline: none;
+  }
+  .input::placeholder { color: #64748b; }
+
+  .review-btn {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #3b82f6 0%, #d97706 100%);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.4);
+  }
+  .review-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+  .modal {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    width: 90%; max-width: 400px;
+    text-align: center;
+  }
+  .modal-icon { font-size: 48px; margin-bottom: 16px; }
+  .modal-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .modal-detail { font-size: 13px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+  .modal-btn {
+    width: 100%; height: 48px; background: #fbbf24; border: none;
+    border-radius: 10px; color: #0f172a; font-weight: 800; font-size: 16px; cursor: pointer;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 10px 0;
+    display: flex; justify-content: space-around;
+    z-index: 100;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; cursor: pointer; color: #64748b; }
+  .nav-item.active { color: #22d3ee; }
+  .nav-icon { font-size: 22px; }
+
+  .hint { font-size: 11px; color: #64748b; text-align: center; margin: 10px 16px 0 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">B²</div>
+  <span class="brand">BOTS <span style="color:#fbbf24">By Adarsh</span></span>
+  <div class="sub">SECURE WALLET</div>
+</div>
+
+<!-- Screen 1: Cash Out Home -->
+<div id="screenHome" class="screen active">
+  <div class="page-title">Cash Out</div>
+  <div class="page-sub">Withdraw your wallet balance</div>
+
+  <div class="card">
+    <div class="bal-label">Available Balance</div>
+    <div class="bal-amount" id="balAmt">₹0.00</div>
+    <div class="bal-note">Bot funds available</div>
+  </div>
+
+  <div class="field-label" style="margin:0 16px 8px 16px;">Get paid to</div>
+  <div class="method-card selected" id="optUpi" onclick="selectMethod('upi')">
+    <div class="method-icon">🏦</div>
+    <div class="method-info">
+      <div class="method-name">UPI</div>
+      <div class="method-desc">Direct bank transfer</div>
+    </div>
+  </div>
+  <div class="method-card" id="optPayzy" onclick="selectMethod('payzy')">
+    <div class="method-icon">💳</div>
+    <div class="method-info">
+      <div class="method-name">Payzy Wallet</div>
+      <div class="method-desc">Instant wallet payout</div>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label class="field-label" id="recvLabel">UPI ID</label>
+    <input type="text" class="input" id="recvInput" placeholder="Enter your UPI ID (e.g. name@upi)">
+  </div>
+
+  <div class="input-group">
+    <label class="field-label">Amount (₹)</label>
+    <input type="number" class="input" id="amtInput" placeholder="0" step="0.01" min="0">
+  </div>
+
+  <button class="review-btn" id="reviewBtn" onclick="goReview()">Review</button>
+</div>
+
+<!-- Screen 2: Review -->
+<div id="screenReview" class="screen">
+  <div class="page-title">Review</div>
+  <div class="page-sub">Please confirm your withdrawal details</div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+      <span style="font-size:13px; color:#94a3b8;">Amount</span>
+      <span id="revAmt" style="font-size:15px; font-weight:700; color:#fff;">₹0</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+      <span style="font-size:13px; color:#94a3b8;">To</span>
+      <span id="revTo" style="font-size:15px; font-weight:600; color:#fbbf24;">—</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+      <span style="font-size:13px; color:#94a3b8;">Via</span>
+      <span id="revVia" style="font-size:15px; font-weight:600; color:#fbbf24;">—</span>
+    </div>
+  </div>
+
+  <button class="review-btn" onclick="confirmWithdraw()">Confirm &amp; Withdraw</button>
+  <button style="width:100%; height:48px; background:transparent; border:1px solid rgba(255,255,255,0.2); border-radius:12px; color:#94a3b8; margin-top:10px; cursor:pointer;" onclick="goHome()">Back</button>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Successfully withdrawn</div>
+    <div class="modal-detail">Your withdrawal request has been submitted. Amount will be credited shortly.</div>
+    <button class="modal-btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<nav class="nav-bar">
+  <div class="nav-item" onclick="tg.openLink('https://t.me/AdarshhhWallet_bot?start=home')">
+    <div class="nav-icon">🏠</div>
+    <div>Home</div>
+  </div>
+  <div class="nav-item active">
+    <div class="nav-icon">💵</div>
+    <div>Cash Out</div>
+  </div>
+  <div class="nav-item" onclick="tg.openLink('https://t.me/AdarshhhWallet_bot')">
+    <div class="nav-icon">📋</div>
+    <div>Menu</div>
+  </div>
+</nav>
+
+<div class="hint">Powered by Adarsh Wallet • Telegram Mini App</div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+
+  let selectedMethod = 'upi';
+  let balance = 0;
+
+  function setBalance(amount) {
+    balance = parseFloat(amount) || 0;
+    document.getElementById('balAmt').textContent = '₹' + balance.toFixed(2);
+  }
+
+  function selectMethod(m) {
+    selectedMethod = m;
+    document.getElementById('optUpi').classList.toggle('selected', m === 'upi');
+    document.getElementById('optPayzy').classList.toggle('selected', m === 'payzy');
+    document.getElementById('recvLabel').textContent = m === 'upi' ? 'UPI ID' : 'Payzy Number';
+    document.getElementById('recvInput').placeholder = m === 'upi' ? 'Enter your UPI ID (e.g. name@upi)' : 'Enter Payzy registered number';
+  }
+
+  function goReview() {
+    const recv = document.getElementById('recvInput').value.trim();
+    const amt = parseFloat(document.getElementById('amtInput').value);
+    if (!recv) { alert('Please enter receiver'); return; }
+    if (!amt || amt <= 0) { alert('Enter valid amount'); return; }
+    if (amt > balance) { alert('Insufficient balance'); return; }
+
+    document.getElementById('revAmt').textContent = '₹' + amt.toFixed(2);
+    document.getElementById('revTo').textContent = recv;
+    document.getElementById('revVia').textContent = selectedMethod === 'upi' ? 'UPI' : 'Payzy Wallet';
+
+    document.getElementById('screenHome').classList.remove('active');
+    document.getElementById('screenReview').classList.add('active');
+  }
+
+  function goHome() {
+    document.getElementById('screenReview').classList.remove('active');
+    document.getElementById('screenHome').classList.add('active');
+  }
+
+  function confirmWithdraw() {
+    document.getElementById('successModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('successModal').style.display = 'none';
+    goHome();
+  }
+
+  setBalance(0);
+</script>
+
+</body>
+</html>
