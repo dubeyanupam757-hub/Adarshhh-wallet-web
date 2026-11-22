@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Account - Adarsh Wallet</title>
+<title>Adarsh Wallet - Home</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -14,19 +14,23 @@
     padding-bottom: 80px;
   }
   .header { padding: 16px; text-align: center; }
-  .logo { font-size: 18px; font-weight: bold; color: #fbbf24; letter-spacing: 1px; }
-  .sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .logo { width: 32px; height: 32px; background: #22d3ee; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a; font-size: 14px; margin-right: 8px; }
+  .brand { font-size: 16px; font-weight: 700; letter-spacing: 0.5px; vertical-align: middle; }
+  .brand span { color: #fbbf24; }
+  .sub { font-size: 11px; color: #94a3b8; letter-spacing: 1px; margin-top: 4px; display: block; }
+  .page-title { font-size: 22px; font-weight: 700; margin: 20px 16px 6px 16px; color: #fff; }
+  .page-sub { font-size: 13px; color: #94a3b8; margin: 0 16px 18px 16px; }
   .card {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
-    padding: 20px;
-    margin: 16px;
-    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 16px;
+    margin: 0 16px 20px 16px;
+    border: 1px solid rgba(255,255,255,0.08);
   }
   .card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #fbbf24; }
-  .bal-label { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
-  .bal-amount { font-size: 36px; font-weight: 800; color: #fbbf24; margin-bottom: 16px; }
+  .bal-label { font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+  .bal-amount { font-size: 28px; font-weight: 800; color: #fbbf24; margin-bottom: 16px; }
   .holder-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; font-size: 14px; color: #fbbf24; }
   .holder-row::before, .holder-row::after { content: "→"; font-size: 12px; color: #fbbf24; }
   .holder-text { font-weight: 600; }
@@ -34,7 +38,7 @@
   .user-info div { margin: 4px 0; }
   .user-info b { color: #e2e8f0; }
   .tx-label { font-size: 16px; font-weight: 600; color: #fbbf24; margin: 16px 16px 8px 16px; }
-  .tx-list { margin: 16px; }
+  .tx-list { margin: 0 16px 16px 16px; }
   .tx-item {
     background: rgba(255,255,255,0.03);
     border-radius: 12px;
@@ -43,95 +47,83 @@
     border: 1px solid rgba(255,255,255,0.05);
     display: flex; align-items: center; gap: 12px;
   }
-  .tx-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .tx-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
   .tx-details { flex: 1; }
   .tx-title { font-size: 14px; font-weight: 600; color: #e2e8f0; }
   .tx-sub { font-size: 12px; color: #94a3b8; }
   .nav-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(10px);
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255,255,255,0.1);
     padding: 10px 0;
     display: flex; justify-content: space-around;
     z-index: 100;
   }
-  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; color: #94a3b8; text-decoration: none; }
-  .nav-item.active { color: #fbbf24; }
-  .nav-icon { font-size: 24px; margin-bottom: 2px; }
-  .bot-link { margin: 16px; text-align: center; }
-  .bot-link a { color: #3b82f6; text-decoration: none; font-size: 13px; }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: #64748b; text-decoration: none; }
+  .nav-item.active { color: #22d3ee; }
+  .nav-icon { font-size: 22px; }
+  .hint { font-size: 11px; color: #64748b; text-align: center; margin: 10px 16px 0 16px; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="logo">B² BOTS By Adarsh</div>
+  <div class="logo">B²</div>
+  <span class="brand">BOTS <span style="color:#fbbf24">By Adarsh</span></span>
   <div class="sub">SECURE WALLET</div>
 </div>
 
-<div class="bot-link">
-  <a href="https://t.me/AdarshhhWallet_bot?start=home">🤖 बॉट में खोलें</a>
-</div>
+<div class="page-title">My Account</div>
+<div class="page-sub">Your personal wallet dashboard</div>
 
 <div class="card">
   <div class="card-title">My Wallet</div>
-  <div class="bal-label">Your personal wallet dashboard</div>
-  
   <div class="bal-label">Available Balance</div>
   <div class="bal-amount" id="balAmt">₹0.00</div>
-  
-  <div class="holder-row">
-    <span>→</span>
-    <span class="holder-text">Bot Holder</span>
-    <span>→</span>
+  <div style="text-align:center; margin:8px 0;">
+    <button class="nav-item" onclick="refreshBalance()" style="background:#3b82f6; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer;">Refresh Balance</button>
   </div>
-  <div style="text-align:center; font-size:13px; color:#fbbf24; font-weight:600; margin:4px 0;">
-    👑 Adarsh Wallet 👑
-  </div>
-  
-  <div class="user-info">
-    <div><b>Name:</b> <span id="userName">Adarsh</span></div>
-    <div><b>User ID:</b> <span style="font-family:monospace; color:#94a3b8;" id="userId">000000</span></div>
-  </div>
-  
-  <div class="tx-label">📄 Transactions</div>
-  <div class="tx-list">
-    <div class="tx-item">
-      <div class="tx-icon">➤</div>
-      <div class="tx-details">
-        <div class="tx-title">Payment Sent</div>
-        <div class="tx-sub">Success</div>
-      </div>
+</div>
+
+<div class="tx-label">📄 Transactions</div>
+<div class="tx-list">
+  <div class="tx-item">
+    <div class="tx-icon">➤</div>
+    <div class="tx-details">
+      <div class="tx-title">Payment Sent</div>
+      <div class="tx-sub">Success</div>
     </div>
-    <div class="tx-item">
-      <div class="tx-icon">🎁</div>
-      <div class="tx-details">
-        <div class="tx-title">Bonus Added</div>
-        <div class="tx-sub">Daily Bonus</div>
-      </div>
+  </div>
+  <div class="tx-item">
+    <div class="tx-icon">🎁</div>
+    <div class="tx-details">
+      <div class="tx-title">Bonus Added</div>
+      <div class="tx-sub">Daily Bonus</div>
     </div>
   </div>
 </div>
 
 <nav class="nav-bar">
-  <a class="nav-item active" href="#">
+  <a class="nav-item active" href="index.html">
     <div class="nav-icon">🏠</div>
     <div>Home</div>
   </a>
-  <a class="nav-item" href="https://t.me/AdarshhhWallet_bot?start=payuser">
+  <a class="nav-item" href="pay.html">
     <div class="nav-icon">👤</div>
     <div>Pay User</div>
   </a>
-  <a class="nav-item" href="https://t.me/AdarshhhWallet_bot?start=withdraw">
+  <a class="nav-item" href="withdraw.html">
     <div class="nav-icon">💸</div>
     <div>Withdraw</div>
   </a>
-  <a class="nav-item" href="https://t.me/AdarshhhWallet_bot?start=dailybonus">
+  <a class="nav-item" href="bonus.html">
     <div class="nav-icon">🎁</div>
     <div>Bonus</div>
   </a>
 </nav>
+
+<div class="hint">Powered by Adarsh Wallet • Secure & Instant</div>
 
 <script>
   const tg = window.Telegram.WebApp;
@@ -143,4 +135,4 @@
 </script>
 
 </body>
-                            </html>
+ </html>
