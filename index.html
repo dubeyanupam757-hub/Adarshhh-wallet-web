@@ -4,135 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adarsh Wallet - Home</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
-    color: #fff;
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
-  .header { padding: 16px; text-align: center; }
-  .logo { width: 32px; height: 32px; background: #22d3ee; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a; font-size: 14px; margin-right: 8px; }
-  .brand { font-size: 16px; font-weight: 700; letter-spacing: 0.5px; vertical-align: middle; }
-  .brand span { color: #fbbf24; }
-  .sub { font-size: 11px; color: #94a3b8; letter-spacing: 1px; margin-top: 4px; display: block; }
-  .page-title { font-size: 22px; font-weight: 700; margin: 20px 16px 6px 16px; color: #fff; }
-  .page-sub { font-size: 13px; color: #94a3b8; margin: 0 16px 18px 16px; }
-  .card {
-    background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 20px 16px;
-    margin: 0 16px 20px 16px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #fbbf24; }
-  .bal-label { font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
-  .bal-amount { font-size: 28px; font-weight: 800; color: #fbbf24; margin-bottom: 16px; }
-  .holder-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; font-size: 14px; color: #fbbf24; }
-  .holder-row::before, .holder-row::after { content: "→"; font-size: 12px; color: #fbbf24; }
-  .holder-text { font-weight: 600; }
-  .user-info { margin-top: 16px; font-size: 13px; color: #cbd5e1; }
-  .user-info div { margin: 4px 0; }
-  .user-info b { color: #e2e8f0; }
-  .tx-label { font-size: 16px; font-weight: 600; color: #fbbf24; margin: 16px 16px 8px 16px; }
-  .tx-list { margin: 0 16px 16px 16px; }
-  .tx-item {
-    background: rgba(255,255,255,0.03);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-    border: 1px solid rgba(255,255,255,0.05);
-    display: flex; align-items: center; gap: 12px;
-  }
-  .tx-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .tx-details { flex: 1; }
-  .tx-title { font-size: 14px; font-weight: 600; color: #e2e8f0; }
-  .tx-sub { font-size: 12px; color: #94a3b8; }
-  .nav-bar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding: 10px 0;
-    display: flex; justify-content: space-around;
-    z-index: 100;
-  }
-  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: #64748b; text-decoration: none; }
-  .nav-item.active { color: #22d3ee; }
-  .nav-icon { font-size: 22px; }
-  .hint { font-size: 11px; color: #64748b; text-align: center; margin: 10px 16px 0 16px; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">B²</div>
-  <span class="brand">BOTS <span style="color:#fbbf24">By Adarsh</span></span>
-  <div class="sub">SECURE WALLET</div>
-</div>
+<div class="app">
+  <header class="header">
+    <div class="logo">B²</div>
+    <div class="brand">BOTS <span>By Adarsh</span></div>
+    <div class="sub">SECURE WALLET</div>
+  </header>
 
-<div class="page-title">My Account</div>
-<div class="page-sub">Your personal wallet dashboard</div>
-
-<div class="card">
-  <div class="card-title">My Wallet</div>
-  <div class="bal-label">Available Balance</div>
-  <div class="bal-amount" id="balAmt">₹0.00</div>
-  <div style="text-align:center; margin:8px 0;">
-    <button class="nav-item" onclick="refreshBalance()" style="background:#3b82f6; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer;">Refresh Balance</button>
-  </div>
-</div>
-
-<div class="tx-label">📄 Transactions</div>
-<div class="tx-list">
-  <div class="tx-item">
-    <div class="tx-icon">➤</div>
-    <div class="tx-details">
-      <div class="tx-title">Payment Sent</div>
-      <div class="tx-sub">Success</div>
+  <main class="main" id="mainContent">
+    <div class="page-header">
+      <h1>My Account</h1>
+      <p>Your personal wallet dashboard</p>
     </div>
-  </div>
-  <div class="tx-item">
-    <div class="tx-icon">🎁</div>
-    <div class="tx-details">
-      <div class="tx-title">Bonus Added</div>
-      <div class="tx-sub">Daily Bonus</div>
-    </div>
+
+    <section class="card wallet-card">
+      <h2>My Wallet</h2>
+      <div class="balance-row">
+        <span class="bal-label">Available Balance</span>
+        <span class="bal-amount" id="balAmt">₹0.00</span>
+      </div>
+      <button class="btn-refresh" onclick="loadBalance()">↻ Refresh</button>
+    </section>
+
+    <section class="card info-card">
+      <div class="holder-row">
+        <span>→</span><span class="holder-text">Bot Holder</span><span>→</span>
+      </div>
+      <p class="bot-name">👑 Adarsh Wallet 👑</p>
+      <div class="user-info">
+        <div><b>Name:</b> <span id="userName">User</span></div>
+        <div><b>User ID:</b> <code id="userId">000000</code></div>
+      </div>
+    </section>
+
+    <section class="section transactions-section">
+      <div class="section-header">
+        <h2>📄 Transactions</h2>
+        <button class="btn-view-all" onclick="openViewAll()">View All</button>
+      </div>
+      <div class="tx-list" id="txList"></div>
+    </section>
+  </main>
+
+  <nav class="nav-bar">
+    <a class="nav-item active" href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a class="nav-item" href="pay.html"><span class="nav-icon">👤</span><span>Pay User</span></a>
+    <a class="nav-item" href="withdraw.html"><span class="nav-icon">💸</span><span>Withdraw</span></a>
+    <a class="nav-item" href="bonus.html"><span class="nav-icon">🎁</span><span>Bonus</span></a>
+  </nav>
+</div>
+
+<!-- Transaction Detail Modal -->
+<div class="modal-overlay" id="txModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeTxModal()">✕</button>
+    <div id="txModalContent"></div>
   </div>
 </div>
 
-<nav class="nav-bar">
-  <a class="nav-item active" href="index.html">
-    <div class="nav-icon">🏠</div>
-    <div>Home</div>
-  </a>
-  <a class="nav-item" href="pay.html">
-    <div class="nav-icon">👤</div>
-    <div>Pay User</div>
-  </a>
-  <a class="nav-item" href="withdraw.html">
-    <div class="nav-icon">💸</div>
-    <div>Withdraw</div>
-  </a>
-  <a class="nav-item" href="bonus.html">
-    <div class="nav-icon">🎁</div>
-    <div>Bonus</div>
-  </a>
-</nav>
-
-<div class="hint">Powered by Adarsh Wallet • Secure & Instant</div>
-
-<script>
-  const tg = window.Telegram.WebApp;
-  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    const user = tg.initDataUnsafe.user;
-    document.getElementById('userName').textContent = user.username || user.first_name || 'User';
-    document.getElementById('userId').textContent = user.id;
-  }
-</script>
-
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script src="index.js"></script>
 </body>
  </html>
