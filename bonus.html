@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head><meta charset="UTF-8"><title>Bonus - Adarsh Wallet</title><style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); color: #fff; min-height: 100vh; padding-bottom: 80px; }
+.header { padding: 16px; text-align: center; }
+.logo { width: 32px; height: 32px; background: #22d3ee; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #0f172a; font-size: 14px; margin-right: 8px; }
+.brand { font-size: 16px; font-weight: 700; letter-spacing: 0.5px; vertical-align: middle; }
+.brand span { color: #fbbf24; }
+.sub { font-size: 11px; color: #94a3b8; letter-spacing: 1px; margin-top: 4px; display: block; }
+.page-title { font-size: 22px; font-weight: 700; margin: 20px 16px 6px 16px; color: #fff; }
+.page-sub { font-size: 13px; color: #94a3b8; margin: 0 16px 18px 16px; }
+.card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border-radius: 16px; padding: 24px 16px; margin: 0 16px 20px 16px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.card-title { font-size: 18px; font-weight: 600; color: #fbbf24; margin-bottom: 8px; }
+.card-desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+.scratch-card { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); border-radius: 16px; padding: 20px; margin: 0 auto 20px auto; max-width: 300px; box-shadow: 0 8px 32px rgba(245,158,11,0.3); }
+.scratch-label { font-size: 12px; color: #fff; opacity: 0.9; margin-bottom: 8px; }
+.scratch-amount { font-size: 28px; font-weight: 800; color: #fff; }
+.timer { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+.gift-card { background: rgba(30, 41, 59, 0.6); border-radius: 16px; padding: 20px 16px; margin: 0 16px 20px 16px; border: 1px solid rgba(255,255,255,0.08); }
+.gift-title { font-size: 16px; font-weight: 600; color: #fbbf24; margin-bottom: 8px; }
+.gift-desc { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+.btn { width: 100%; height: 48px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.btn-primary { background: #fbbf24; color: #0f172a; }
+.btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+.nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.08); padding: 10px 0; display: flex; justify-content: space-around; z-index: 100; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: #64748b; text-decoration: none; }
+.nav-item.active { color: #22d3ee; }
+.nav-icon { font-size: 22px; }
+.hint { font-size: 11px; color: #64748b; text-align: center; margin: 10px 16px 0 16px; }
+</style></head>
+<body>
+
+<div class="header">
+  <div class="logo">B²</div>
+  <span class="brand">BOTS <span style="color:#fbbf24">By Adarsh</span></span>
+  <div class="sub">SECURE WALLET</div>
+</div>
+
+<div class="page-title">Rewards</div>
+<div class="page-sub">Daily bonus and gift codes</div>
+
+<div class="card">
+  <div class="card-title">Daily Scratch Card</div>
+  <div class="card-desc">Scratch to reveal your reward</div>
+  <div class="scratch-card">
+    <div class="scratch-label">Next card in</div>
+    <div class="timer" id="countdown">14:25:11</div>
+    <div style="font-size:13px; color:#fff; opacity:0.8; margin-top:8px;">Up to ₹6</div>
+  </div>
+  <button class="btn btn-primary" onclick="alert('Bonus claimed! ₹5 added to your balance.')">Claim Daily Bonus</button>
+</div>
+
+<div class="gift-card">
+  <div class="gift-title">Gift Code</div>
+  <div class="gift-desc">Enter a valid gift code to redeem</div>
+  <input type="text" class="input" id="codeInput" placeholder="Enter code">
+  <button class="btn btn-secondary" onclick="redeemCode()">Redeem</button>
+</div>
+
+<nav class="nav-bar">
+  <a class="nav-item" href="index.html"><div class="nav-icon">🏠</div><div>Home</div></a>
+  <a class="nav-item" href="pay.html"><div class="nav-icon">👤</div><div>Pay User</div></a>
+  <a class="nav-item" href="withdraw.html"><div class="nav-icon">💸</div><div>Withdraw</div></a>
+  <a class="nav-item active" href="bonus.html"><div class="nav-icon">🎁</div><div>Bonus</div></a>
+</nav>
+
+<div class="hint">Powered by Adarsh Wallet • Secure & Instant</div>
+
+<script>
+  const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+  function redeemCode() { const code = document.getElementById('codeInput').value.trim(); if (!code) { alert('Please enter a code'); return; } alert('Code redeemed: ' + code); document.getElementById('codeInput').value = ''; }
+  let totalSec = 14 * 3600 + 25 * 60 + 11;
+  function tick() { totalSec--; if (totalSec < 0) totalSec = 24 * 3600; const h = Math.floor(totalSec / 3600); const m = Math.floor((totalSec % 3600) / 60); const s = totalSec % 60; const str = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'); document.getElementById('countdown').textContent = str; } setInterval(tick, 1000);
+</script>
+
+</body>
+  </html>
