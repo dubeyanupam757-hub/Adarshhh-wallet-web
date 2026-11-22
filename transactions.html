@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Transactions - Adarsh Wallet</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <header class="header">
+    <div class="logo">B²</div>
+    <div class="brand">BOTS <span>By Adarsh</span></div>
+    <div class="sub">SECURE WALLET</div>
+  </header>
+
+  <main class="main">
+    <div class="page-header with-back">
+      <button class="btn-back" onclick="goBack()">←</button>
+      <h1>All Transactions</h1>
+    </div>
+
+    <section class="card">
+      <div class="tx-list" id="txList"></div>
+      <div id="loadMoreContainer" style="text-align:center; margin-top:16px;">
+        <button class="btn-secondary" id="loadMoreBtn" onclick="loadMore()">Load More</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav-bar">
+    <a class="nav-item" href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a class="nav-item" href="pay.html"><span class="nav-icon">👤</span><span>Pay User</span></a>
+    <a class="nav-item" href="withdraw.html"><span class="nav-icon">💸</span><span>Withdraw</span></a>
+    <a class="nav-item active" href="bonus.html"><span class="nav-icon">🎁</span><span>Bonus</span></a>
+  </nav>
+</div>
+
+<!-- Transaction Detail Modal (same as index.html) -->
+<div class="modal-overlay" id="txModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeTxModal()">✕</button>
+    <div id="txModalContent"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+let uid = API.getUserId(), offset = 0, limit = 20, loading = false;
+
+async function loadMore() {
+  if (loading) return;
+  loading = true;
+  const btn = document.getElementById("loadMoreBtn");
+  btn.textContent = "Loading..."; btn.disabled = true;
+  
+  try {
+    const res = await API.getTransactions(uid, limit, offset);
+    if (res.ok) {
+      renderTransactions(res.transactions, offset === 0);
+      offset += res.transactions.length;
+      if (offset >= res.total) {
+        document.getElementById("loadMoreContainer").style.display = "none";
+      }
+    }
+  } catch (e) { console.error(e); }
+  loading = false;
+  btn.textContent = "Load More"; btn.disabled = false;
+}
+
+function renderTransactions(txns, clear) {
+  const el = document.getElementById("txList");
+  if (clear) el.innerHTML = "";
+  if (txns.length === 0 && clear) { el.innerHTML = '<p class="empty">No transactions</p>'; return; }
+  el.innerHTML += txns.map(t => `
+    <div class="tx-item" onclick="openTxDetail(${JSON.stringify(t).replace(/"/g, '&quot;')})">
+      <div class="tx-icon">${iconForKind(t.kind)}</div>
+      <div class="tx-details">
+        <div class="tx-title">${escapeHtml(t.kind)}</div>
+        <div class="tx-sub">${escapeHtml(t.note)} · ${t.date}</div>
+      </div>
+      <div class="tx-amount ${t.amount >= 0 ? 'pos' : 'neg'}">${t.amount >= 0 ? '+' : ''}₹${Math.abs(t.amount).toFixed(2)}</div>
+    </div>
+  `).join("");
+}
+
+function iconForKind(kind) {
+  const k = kind.toLowerCase();
+  if (k.includes("payment") || k.includes("sent")) return "➤";
+  if (k.includes("bonus") || k.includes("gift")) return "🎁";
+  if (k.includes("withdraw")) return "💸";
+  if (k.includes("received")) return "⬅";
+  return "📝";
+}
+
+function escapeHtml(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function openTxDetail(t) {
+  document.getElementById("txModalContent").innerHTML = `
+    <h3>Transaction Details</h3>
+    <div class="detail-row"><span>Type</span><strong>${escapeHtml(t.kind)}</strong></div>
+    <div class="detail-row"><span>Amount</span><strong class="${t.amount >= 0 ? 'pos' : 'neg'}">${t.amount >= 0 ? '+' : ''}₹${Math.abs(t.amount).toFixed(2)}</strong></div>
+    <div class="detail-row"><span>Note</span><strong>${escapeHtml(t.note)}</strong></div>
+    <div class="detail-row"><span>Status</span><strong>${escapeHtml(t.status)}</strong></div>
+    <div class="detail-row"><span>Date</span><strong>${escapeHtml(t.date)}</strong></div>
+  `;
+  document.getElementById("txModal").style.display = "flex";
+}
+
+function closeTxModal() { document.getElementById("txModal").style.display = "none"; }
+function goBack() { window.location.href = "index.html"; }
+
+loadMore();
+</script>
+</body>
+        </html>
